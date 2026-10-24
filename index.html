@@ -5,53 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trading Kitaab - Pro Journal</title>
 <style>
-body{font-family:Arial;background:#0f172a;color:white;padding:20px}
-.card{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:20px}
+body{font-family:Arial;background:#0f172a;color:white;padding:15px;}
+.card{background:#1e293b;padding:20px;border-radius:12px;max-width:500px;margin:auto;}
 h1{color:#22c55e;text-align:center}
-input,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:none}
+input,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:none;font-size:16px;box-sizing:border-box;}
 input{background:#334155;color:white}
-button{background:#22c55e;color:black;font-weight:bold;cursor:pointer}
-table{width:100%;margin-top:15px;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid #334155;text-align:center}
+button{background:#22c55e;color:black;font-weight:bold;cursor:pointer;}
+table{width:100%;margin-top:15px;border-collapse:collapse;}
+th,td{padding:10px;border-bottom:1px solid #334155;text-align:left;}
 .profit{color:#22c55e} .loss{color:#ef4444}
+.affiliate-btn{display:block;background:linear-gradient(90deg, #ff0000, #ff6a00);color:white;padding:18px 20px;font-size:19px;text-decoration:none;border-radius:12px;font-weight:bold;text-align:center;margin:20px 0;animation: pulse 1.5s infinite;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
-<h1>📘 Trading Kitaab - Pro</h1>
+
 <div class="card">
-<h3>➕ Naya Trade Add Kar</h3>
-<input id="stock" placeholder="Stock Name (ex: RELIANCE)">
-<input id="pnl" type="number" placeholder="P&L (ex: 500 ya -200)">
-<button onclick="addTrade()">Add to Kitaab</button>
+<h1>📒 Trading Kitaab</h1>
+
+<!-- YEH HAI TERA PAISE WALA BUTTON -->
+<a href="https://bitli.in/dcPjb2o" target="_blank" class="affiliate-btn">
+🚀 FREE DEMAT ACCOUNT KHOLO - ₹0 me<br><span style="font-size:13px;font-weight:normal;">Angel One + EarnKaro Bonus ₹320</span>
+</a>
+
+<p style="text-align:center;font-size:13px;color:#94a3b8;">Apni trading likho aur profit track karo</p>
+
+<input type="text" id="stock" placeholder="Stock Name Ex: RELIANCE">
+<input type="number" id="pnl" placeholder="Profit / Loss Ex: 500 ya -200">
+<button onclick="addTrade()">+ Trade Add Karo</button>
+
+<table>
+<thead><tr><th>Stock</th><th>P&L</th></tr></thead>
+<tbody id="tradeList"></tbody>
+</table>
+
+<p style="margin-top:15px;">Total P&L: <span id="total">0</span></p>
+
+<a href="https://bitli.in/dcPjb2o" target="_blank" class="affiliate-btn" style="font-size:16px;">
+💰 Abhi Demat Kholke Trading Shuru Karo
+</a>
+
+<p style="font-size:11px;color:#64748b;text-align:center;margin-top:10px;">Note: Ye link se account khologe to tumhe company extra benefit degi aur humari Trading Kitaab free chalti rahegi.</p>
+
 </div>
-<div class="card">
-<h3>📊 Dashboard</h3>
-<p>Total P&L: <span id="total">0</span></p>
-<p>Total Trades: <span id="count">0</span></p>
-<p>Win Rate: <span id="winrate">0%</span></p>
-<table id="table"><tr><th>Stock</th><th>P&L</th></tr></table>
-</div>
+
 <script>
-let trades=JSON.parse(localStorage.getItem('trades')||'[]');
-function render(){
-let total=0,wins=0;
-let html='<tr><th>Stock</th><th>P&L</th></tr>';
-trades.forEach(t=>{
-total+=t.pnl; if(t.pnl>0)wins++;
-html+=`<tr><td>${t.stock}</td><td class="${t.pnl>=0?'profit':'loss'}">${t.pnl}</td></tr>`
-});
-document.getElementById('total').innerText=total;
-document.getElementById('count').innerText=trades.length;
-document.getElementById('winrate').innerText=trades.length?Math.round(wins/trades.length*100)+'%':'0%';
-document.getElementById('table').innerHTML=html;
-}
-function addTrade(){
-let s=document.getElementById('stock').value;
-let p=parseFloat(document.getElementById('pnl').value);
-if(!s||isNaN(p))return alert('Naam aur P&L bhar');
-trades.push({stock:s,pnl:p});localStorage.setItem('trades',JSON.stringify(trades));render();
-document.getElementById('stock').value='';document.getElementById('pnl').value='';
-}
+let trades = JSON.parse(localStorage.getItem('trades') || '[]');
+function render(){let total=0;let html='';trades.forEach(t=>{total+=parseFloat(t.pnl);html+=`<tr><td>${t.stock}</td><td class="${t.pnl>=0?'profit':'loss'}">${t.pnl}</td></tr>`});document.getElementById('tradeList').innerHTML=html;document.getElementById('total').innerHTML=total;document.getElementById('total').className=total>=0?'profit':'loss';}
+function addTrade(){let s=document.getElementById('stock').value;let p=document.getElementById('pnl').value;if(!s||!p){alert('Stock aur P&L likho');return;}trades.push({stock:s,pnl:p});localStorage.setItem('trades',JSON.stringify(trades));document.getElementById('stock').value='';document.getElementById('pnl').value='';render();}
 render();
 </script>
 </body>
