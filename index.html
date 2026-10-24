@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Kitaab - Pro Journal</title>
+<style>
+body{font-family:Arial;background:#0f172a;color:white;padding:20px}
+.card{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:20px}
+h1{color:#22c55e;text-align:center}
+input,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:none}
+input{background:#334155;color:white}
+button{background:#22c55e;color:black;font-weight:bold;cursor:pointer}
+table{width:100%;margin-top:15px;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #334155;text-align:center}
+.profit{color:#22c55e} .loss{color:#ef4444}
+</style>
+</head>
+<body>
+<h1>📘 Trading Kitaab - Pro</h1>
+<div class="card">
+<h3>➕ Naya Trade Add Kar</h3>
+<input id="stock" placeholder="Stock Name (ex: RELIANCE)">
+<input id="pnl" type="number" placeholder="P&L (ex: 500 ya -200)">
+<button onclick="addTrade()">Add to Kitaab</button>
+</div>
+<div class="card">
+<h3>📊 Dashboard</h3>
+<p>Total P&L: <span id="total">0</span></p>
+<p>Total Trades: <span id="count">0</span></p>
+<p>Win Rate: <span id="winrate">0%</span></p>
+<table id="table"><tr><th>Stock</th><th>P&L</th></tr></table>
+</div>
+<script>
+let trades=JSON.parse(localStorage.getItem('trades')||'[]');
+function render(){
+let total=0,wins=0;
+let html='<tr><th>Stock</th><th>P&L</th></tr>';
+trades.forEach(t=>{
+total+=t.pnl; if(t.pnl>0)wins++;
+html+=`<tr><td>${t.stock}</td><td class="${t.pnl>=0?'profit':'loss'}">${t.pnl}</td></tr>`
+});
+document.getElementById('total').innerText=total;
+document.getElementById('count').innerText=trades.length;
+document.getElementById('winrate').innerText=trades.length?Math.round(wins/trades.length*100)+'%':'0%';
+document.getElementById('table').innerHTML=html;
+}
+function addTrade(){
+let s=document.getElementById('stock').value;
+let p=parseFloat(document.getElementById('pnl').value);
+if(!s||isNaN(p))return alert('Naam aur P&L bhar');
+trades.push({stock:s,pnl:p});localStorage.setItem('trades',JSON.stringify(trades));render();
+document.getElementById('stock').value='';document.getElementById('pnl').value='';
+}
+render();
+</script>
+</body>
+  </html>
